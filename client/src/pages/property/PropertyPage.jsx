@@ -38,7 +38,7 @@ const PropertyPage = () => {
 
   const deleteProperty = async () => {
     try {
-      // const response = await axios.delete(`/api/property/${property_id}`);
+      const response = await axios.delete(`/api/property/${property_id}`);
       toast.success("Property deleted successfully");
       navigate("/listings");
     } catch (error) {

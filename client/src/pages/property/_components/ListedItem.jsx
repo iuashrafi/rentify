@@ -25,13 +25,22 @@ const ListedItem = ({ property }) => {
         </div>
 
         <div className="flex items-center justify-start space-x-2 md:space-x-3 mt-3">
-          <Link
+          {/* <Link
             to={`/property/edit/${property._id}`}
             className="btn rounded-full border bg-white btn-sm flex items-center"
           >
             <span>Edit</span>
             <Pencil className="h-4 w-4 md:h-5 md:w-5" />
-          </Link>
+          </Link> */}
+          <button
+            onClick={() => {
+              alert("TODO : if time permits");
+            }}
+            className="btn rounded-full border bg-white btn-sm flex items-center"
+          >
+            <span>Edit</span>
+            <Pencil className="h-4 w-4 md:h-5 md:w-5" />
+          </button>
           <Link
             to={`/listings/${property._id}`}
             className="btn rounded-full btn-neutral btn-sm flex items-center"

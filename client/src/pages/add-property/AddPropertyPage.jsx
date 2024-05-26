@@ -35,8 +35,8 @@ const AddPropertyPage = () => {
       price: 0,
     },
     validationSchema: PropertySchema,
-    onSubmit: async (values, formikBag) => {
-      alert(JSON.stringify(values, null, 2));
+    onSubmit: async (values) => {
+      // alert(JSON.stringify(values, null, 2));
 
       console.log(imageFiles);
       const formData = new FormData();
@@ -61,6 +61,7 @@ const AddPropertyPage = () => {
           },
         });
         toast.success("Property Added successfully");
+        navigate("/listings");
         console.log("property added successfully=", response.data);
       } catch (error) {
         toast.error("Something went wrong!");
@@ -76,7 +77,7 @@ const AddPropertyPage = () => {
     <div className="default-container">
       <TypoGraphyH1 title="Add a Property" />
 
-      <form onSubmit={formik.handleSubmit} className="bg-green-300">
+      <form onSubmit={formik.handleSubmit}>
         <label className="form-control w-full max-w-xs">
           <div className="label">
             <span className="label-text">Title</span>

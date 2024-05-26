@@ -11,5 +11,5 @@
 
 /* container style for our pages */
 .default-container {
-  @apply container mx-auto p-4 md:p-8 xl:p-16  min-h-screen bg-red-300;
+  @apply container mx-auto p-4 md:p-8 xl:p-16 min-h-screen bg-white;
 }

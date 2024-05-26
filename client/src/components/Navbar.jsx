@@ -22,7 +22,7 @@ const Navbar = () => {
       <NavbarLogo />
 
       <div className="flex space-x-2 items-center">
-        <ul className="flex space-x-3 md:space-x-4">
+        <ul className="flex space-x-3 md:space-x-4 mr-2">
           <li>
             <Link to="/" className="hover:underline underline-offset-8">
               Home

@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useFormik } from "formik";
 import axios from "axios";
@@ -9,7 +9,14 @@ import { toast } from "sonner";
 const LoginPage = () => {
   const navigate = useNavigate();
 
-  const { setUser } = useContext(UserContext);
+  const { user, ready, setUser } = useContext(UserContext);
+
+  // check for authorization
+  useEffect(() => {
+    if (ready && user) {
+      return navigate("/");
+    }
+  }, [user, ready]);
 
   // Initializing formik for form management
   const formik = useFormik({
