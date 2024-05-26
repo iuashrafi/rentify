@@ -2,7 +2,7 @@ import { Heart } from "lucide-react";
 
 const PropertyHeading = ({ property }) => {
   return (
-    <div className="bg-pink-300 px-4 py-4">
+    <div className="bg-pink-30 px-4 py-4">
       <h1 className="text-3xl font-semibold text-gray-900">{property.title}</h1>
       <p className="text-gray-800">{property.address}</p>
       <span className="flex items-center space-x-2 mt-1">

@@ -51,7 +51,7 @@ const PropertyPage = () => {
   if (error) return <div>{error}</div>;
 
   return (
-    <div className="container mx-auto bg-green-300">
+    <div className="container mx-auto bg-white">
       <Breadcrumbs />
       <PropertyHeading property={property} />
 

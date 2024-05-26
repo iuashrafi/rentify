@@ -13,6 +13,8 @@ import ProfilePage from "./pages/profile/ProfilePage";
 import AddPropertyPage from "./pages/add-property/AddPropertyPage";
 import ListingsPage from "./pages/property/ListingsPage";
 import PropertyPage from "./pages/property/PropertyPage";
+import SearchPage from "./pages/search/SearchPage";
+import Error404Page from "./pages/Error404Page";
 
 axios.defaults.baseURL = BACKEND_BASE_URL;
 axios.defaults.withCredentials = true;
@@ -39,6 +41,14 @@ function App() {
             {/* My Listings page - for displaying properties added by current user*/}
             <Route path="/listings" element={<ListingsPage />} />
             <Route path="/listings/:property_id" element={<PropertyPage />} />
+
+            {/* Search page */}
+            <Route path="/search" element={<SearchPage />} />
+            {/* note: using the Property page as in Listings */}
+            <Route path="/search/:property_id" element={<PropertyPage />} />
+
+            <Route path="*" element={<Error404Page />} />
+            {/* end routes */}
           </Route>
         </Routes>
       </BrowserRouter>

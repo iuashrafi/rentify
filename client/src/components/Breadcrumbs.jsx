@@ -18,7 +18,7 @@ const Breadcrumbs = () => {
     }
   };
   return (
-    <div className="py-3 px-3 bg-red-300 text-sm breadcrumbs flex space-x-3">
+    <div className="py-3 px-3 bg-red-30 text-sm breadcrumbs flex space-x-3">
       <ul>
         <li>
           <Link to="/">Home</Link>
