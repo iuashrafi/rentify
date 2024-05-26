@@ -25,3 +25,13 @@ export const LoginSchema = Yup.object({
     .min(6, "Must be atleast 6 characters")
     .required("Required"),
 });
+
+// validation for Property - Adding a listing
+export const PropertySchema = Yup.object({
+  title: Yup.string().required("Required"),
+  address: Yup.string().required("Required"),
+  description: Yup.string().required("Required"),
+  perks: Yup.array().of(Yup.string()),
+  beds: Yup.number().positive("Must be greater than 0").required("Required"),
+  price: Yup.number().positive("Must be greater than 0").required("Required"),
+});

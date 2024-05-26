@@ -59,7 +59,7 @@ const Navbar = () => {
                 <Link to="/profile">Profile</Link>
               </li>
               <li>
-                <Link to="/property/add">Create Listing</Link>
+                <Link to="/add-property">Create Listing</Link>
               </li>
               <li>
                 <Link to="/listings">My Listings</Link>

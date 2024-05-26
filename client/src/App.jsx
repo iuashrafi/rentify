@@ -10,6 +10,7 @@ import AuthLayout from "./pages/auth/AuthLayout";
 import LoginPage from "./pages/auth/LoginPage";
 import RegisterPage from "./pages/auth/RegisterPage";
 import ProfilePage from "./pages/profile/ProfilePage";
+import AddPropertyPage from "./pages/add-property/AddPropertyPage";
 
 axios.defaults.baseURL = BACKEND_BASE_URL;
 axios.defaults.withCredentials = true;
@@ -29,6 +30,9 @@ function App() {
 
             {/* Profile page - displaying user's info */}
             <Route path="/profile" element={<ProfilePage />} />
+
+            {/* Add Property page - for creating a listing */}
+            <Route path="/add-property" element={<AddPropertyPage />} />
           </Route>
         </Routes>
       </BrowserRouter>
