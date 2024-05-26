@@ -27,7 +27,10 @@ mongoose
 
 // routes
 const authRoutes = require("./routes/AuthRoutes");
+const propertyRoutes = require("./routes/PropertyRoutes");
+
 app.use("/api/auth", authRoutes);
+app.use("/api/property", propertyRoutes);
 
 // for user context
 app.get("/api/profile", (req, res) => {
