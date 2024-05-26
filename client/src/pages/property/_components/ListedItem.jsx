@@ -1,13 +1,13 @@
-import React from "react";
 import { Link } from "react-router-dom";
-import { BACKEND_BASE_URL } from "../../../config";
+import { generateImageUrl } from "../../../config";
 import { MapPin, Pencil, ArrowUpRight } from "lucide-react";
+
 const ListedItem = ({ property }) => {
   return (
     <div className="flex border-b last:border-none first:pt-0 last:pb-0 py-4">
       <figure>
         <img
-          src={`${BACKEND_BASE_URL}/uploads/${property.photos[0]}`}
+          src={generateImageUrl(property.photos[0])}
           alt="listing thumbnail"
           className="h-32 w-32 lg:h-40 lg:w-44 rounded-xl object-cover border"
         />

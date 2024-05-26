@@ -8,46 +8,46 @@ const { isAuthenticated } = require("../middleware/authMiddleware");
 /*
   AWS S3 setup + multer
 */
-// const { S3Client } = require("@aws-sdk/client-s3");
-// const multerS3 = require("multer-s3");
-// const { AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, S3_BUCKET_NAME, AWS_REGION } =
-//   process.env;
+const { S3Client } = require("@aws-sdk/client-s3");
+const multerS3 = require("multer-s3");
+const { AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, S3_BUCKET_NAME, AWS_REGION } =
+  process.env;
 
 // create s3 instance using S3Client
-// const s3 = new S3Client({
-//   credentials: {
-//     accessKeyId: AWS_ACCESS_KEY_ID,
-//     secretAccessKey: AWS_SECRET_ACCESS_KEY,
-//   },
-//   region: AWS_REGION,
-//   endpoint: `https://s3.${AWS_REGION}.amazonaws.com`,
-// });
-
-// multer file upload
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
+const s3 = new S3Client({
+  credentials: {
+    accessKeyId: AWS_ACCESS_KEY_ID,
+    secretAccessKey: AWS_SECRET_ACCESS_KEY,
   },
-  filename: (req, file, cb) => {
-    // rename the file
-    cb(null, "rentify" + Date.now() + path.extname(file.originalname));
-  },
+  region: AWS_REGION,
+  endpoint: `https://s3.${AWS_REGION}.amazonaws.com`,
 });
 
-// aws-Multer
-// const awsMulterStorage = multerS3({
-//   s3: s3,
-//   bucket: S3_BUCKET_NAME,
-//   metadata: function (req, file, cb) {
-//     cb(null, { fieldName: file.fieldname });
+// multer file upload
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, "uploads/");
 //   },
-//   key: function (req, file, cb) {
-//     cb(null, Date.now().toString() + "-" + file.originalname);
+//   filename: (req, file, cb) => {
+//     // rename the file
+//     cb(null, "rentify" + Date.now() + path.extname(file.originalname));
 //   },
-//   contentType: multerS3.AUTO_CONTENT_TYPE,
 // });
 
-const upload = multer({ storage: storage });
+// aws-Multer
+const awsMulterStorage = multerS3({
+  s3: s3,
+  bucket: S3_BUCKET_NAME,
+  metadata: function (req, file, cb) {
+    cb(null, { fieldName: file.fieldname });
+  },
+  key: function (req, file, cb) {
+    cb(null, Date.now().toString() + "-" + file.originalname);
+  },
+  contentType: multerS3.AUTO_CONTENT_TYPE,
+});
+
+const upload = multer({ storage: awsMulterStorage });
 
 router.post(
   "/",
@@ -59,12 +59,13 @@ router.post(
       const perks = JSON.parse(req.body.perks);
       const user_id = req.user.id;
       // for aws s3
-      // const photos = req.files.map((file) => file.key); // Use 'key' to get the file name in S3
+      const photos = req.files.map((file) => file.key); // Use 'key' to get the file name in S3
+
       //  for multer local
-      const photos = req.files.map((file) => {
-        console.log("file = ", file);
-        return file.filename;
-      });
+      // const photos = req.files.map((file) => {
+      //  // console.log("file = ", file);
+      //   return file.filename;
+      // });
 
       const property = new Property({
         user_id,

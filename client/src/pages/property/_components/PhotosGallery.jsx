@@ -1,12 +1,13 @@
 import { useState } from "react";
-import { BACKEND_BASE_URL } from "../../../config";
+import { generateImageUrl } from "../../../config";
+
 const PhotosGallery = ({ property }) => {
   const [activeImage, setActiveImage] = useState(0);
   return (
     <div className="">
       <div className="bg-red-30 rounded-xl w-full p-2 flex justify-center items-center">
         <img
-          src={`${BACKEND_BASE_URL}/uploads/${property.photos[activeImage]}`}
+          src={generateImageUrl(property.photos[activeImage])}
           alt="Main property"
           className="rounded-xl object-cover h-96 w-full aspect-square"
         />
@@ -18,7 +19,7 @@ const PhotosGallery = ({ property }) => {
             onClick={() => {
               setActiveImage(index);
             }}
-            src={`${BACKEND_BASE_URL}/uploads/${photo}`}
+            src={generateImageUrl(photo)}
             alt={`Property photo ${index + 2}`}
             className="object-cover h-44 aspect-square rounded-xl cursor-pointer"
           />
