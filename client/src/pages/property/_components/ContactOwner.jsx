@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import UserDetails from "../../../components/UserDetails";
 import { toast } from "sonner";
+import { handleEmailNotifications } from "../../../lib/notifications";
 
 const ContactOwner = ({ user, property }) => {
   const [ownerDetails, setOwnerDetails] = useState(null);
@@ -27,7 +28,8 @@ const ContactOwner = ({ user, property }) => {
 
         console.log("user=", user, "owner details=", response.data);
 
-        // TODO : send email notifications
+        // send email notifications
+        handleEmailNotifications(user, response.data);
       })
       .catch((error) => {
         setOwnerDetails(null);

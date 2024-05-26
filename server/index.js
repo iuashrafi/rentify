@@ -30,10 +30,12 @@ mongoose
 const authRoutes = require("./routes/AuthRoutes");
 const propertyRoutes = require("./routes/PropertyRoutes");
 const searchRoutes = require("./routes/SearchRoutes");
+const emailRoutes = require("./routes/EmailRoutes");
 
 app.use("/api/auth", authRoutes);
 app.use("/api/property", propertyRoutes);
 app.use("/api/search", searchRoutes);
+app.use("/api/email", emailRoutes);
 
 // for user context
 app.get("/api/profile", (req, res) => {
