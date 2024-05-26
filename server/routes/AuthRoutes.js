@@ -115,4 +115,19 @@ router.post("/logout", (req, res) => {
   res.cookie("token", "").json(true);
 });
 
+// get user by id
+router.get("/:user_id", async (req, res) => {
+  try {
+    const { user_id } = req.params;
+    const user = await User.findById(user_id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: "internal server error", error });
+  }
+});
 module.exports = router;

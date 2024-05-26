@@ -11,6 +11,8 @@ import LoginPage from "./pages/auth/LoginPage";
 import RegisterPage from "./pages/auth/RegisterPage";
 import ProfilePage from "./pages/profile/ProfilePage";
 import AddPropertyPage from "./pages/add-property/AddPropertyPage";
+import ListingsPage from "./pages/property/ListingsPage";
+import PropertyPage from "./pages/property/PropertyPage";
 
 axios.defaults.baseURL = BACKEND_BASE_URL;
 axios.defaults.withCredentials = true;
@@ -33,6 +35,10 @@ function App() {
 
             {/* Add Property page - for creating a listing */}
             <Route path="/add-property" element={<AddPropertyPage />} />
+
+            {/* My Listings page - for displaying properties added by current user*/}
+            <Route path="/listings" element={<ListingsPage />} />
+            <Route path="/listings/:property_id" element={<PropertyPage />} />
           </Route>
         </Routes>
       </BrowserRouter>

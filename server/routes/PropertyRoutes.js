@@ -239,4 +239,28 @@ router.post("/like", async (req, res) => {
   }
 });
 
+router.delete("/:property_id", isAuthenticated, async (req, res) => {
+  try {
+    const { property_id } = req.params;
+    const user_id = req.user.id;
+
+    // Find the property by ID and check if the current user is the owner
+    const property = await Property.findOne({ _id: property_id, user_id });
+
+    if (!property) {
+      return res.status(404).json({
+        message: "Property not found or you're not authorized to delete it",
+      });
+    }
+
+    // Delete the property
+    await Property.findByIdAndDelete(property_id);
+
+    res.status(200).json({ message: "Property deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting property:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
 module.exports = router;
