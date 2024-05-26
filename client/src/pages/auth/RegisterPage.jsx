@@ -29,7 +29,7 @@ const RegisterPage = () => {
     validationSchema: RegisterSchema,
     onSubmit: async (values, formikBag) => {
       // for debugging
-      alert(JSON.stringify(values, null, 2));
+      // alert(JSON.stringify(values, null, 2));
       axios
         .post("/api/auth/register", values)
         .then((response) => {

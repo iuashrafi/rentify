@@ -3,14 +3,7 @@ const PropertyDescription = ({ property }) => {
     <div className="p-4">
       <div className="">
         <h1 className="text-2xl font-semibold">About</h1>
-        <p className="text-black mt-2">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam iste
-          in odit molestias quos officiis corrupti atque consectetur delectus
-          explicabo saepe id nemo ad, beatae animi. Incidunt quos voluptatem
-          aliquam ratione. Incidunt, praesentium eveniet. Sit, voluptatem
-          placeat ut recusandae cum delectus, obcaecati accusamus ipsam eaque
-          sequi, omnis eius odit voluptas.
-        </p>
+        <p className="text-black mt-2">{property.description}</p>
       </div>
       <div className="bg-gray-20 mt-4">
         <h1 className="text-2xl font-semibold">Amenities/Perks</h1>

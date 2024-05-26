@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { Heart } from "lucide-react";
-import { BACKEND_BASE_URL } from "../config";
+import { BACKEND_BASE_URL, generateImageUrl } from "../config";
 import { toast } from "sonner";
 
 const PropertyCard = ({ property, currentUserId }) => {
@@ -48,8 +48,8 @@ const PropertyCard = ({ property, currentUserId }) => {
     >
       <div className="relative">
         <img
-          src={BACKEND_BASE_URL + "/uploads/" + property?.photos[0]}
-          // src={generateImageUrl(property?.photos[0])}
+          // src={BACKEND_BASE_URL + "/uploads/" + property?.photos[0]}
+          src={generateImageUrl(property?.photos[0])}
           alt="image"
           className="rounded-xl object-cover w-full h-40"
         />

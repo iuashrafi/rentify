@@ -71,9 +71,9 @@ const PropertyPage = () => {
                 <h1 className="text-gray-700 text-lg font-semibold">
                   You own this property
                 </h1>
-                <button className="btn btn-neutral w-full mt-3 rounded-full">
+                {/* <button className="btn btn-neutral w-full mt-3 rounded-full">
                   Edit this Property
-                </button>
+                </button> */}
                 <button
                   onClick={deleteProperty}
                   className="btn btn-neutral w-full mt-3 rounded-full"
