@@ -101,21 +101,25 @@ router.post("/login", async (req, res) => {
   } catch (error) {
     // If any other error occurs, return 500 Internal Server Error
     console.log("[SERVER] Error occured during login, ERROR", error);
-    res.status(500).json({ message: "Internal Sserver error" });
+    res.status(500).json({ message: "Internal Server error" });
   }
 });
 
 /**
  * @desc API endpoint for logging out user
  * @route POST /api/auth/logout
- * @access Public
+ * @access Private (by logged in users)
  */
 router.post("/logout", (req, res) => {
   // Clearing the token cookie and returning true upon successful logout
   res.cookie("token", "").json(true);
 });
 
-// get user by id
+/**
+ * @desc API endpoint for getting user(seller/buyer) details
+ * @route POST /api/auth/:user_id
+ * @access Private (by logged in users only)
+ */
 router.get("/:user_id", async (req, res) => {
   try {
     const { user_id } = req.params;

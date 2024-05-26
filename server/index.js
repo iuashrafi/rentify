@@ -40,14 +40,14 @@ app.use("/api/email", emailRoutes);
 // for user context
 app.get("/api/profile", (req, res) => {
   const { token } = req.cookies;
-  console.log("cookies=", req.cookies);
+  // console.log("cookies=", req.cookies);
   if (token) {
     jwt.verify(token, process.env.JWT_SECRET, {}, async (err, userData) => {
       if (err) throw err;
       const { fname, lname, email, phone, _id } = await User.findById(
         userData.id
       );
-      console.log({ fname, lname, email, phone, _id });
+      // console.log({ fname, lname, email, phone, _id });
       res.json({ fname, lname, email, phone, _id });
     });
   } else {

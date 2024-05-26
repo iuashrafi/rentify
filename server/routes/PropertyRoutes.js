@@ -49,6 +49,9 @@ const awsMulterStorage = multerS3({
 
 const upload = multer({ storage: awsMulterStorage });
 
+/**
+ * @description API endpoint to add a property and upload images
+ */
 router.post(
   "/",
   isAuthenticated,
@@ -160,38 +163,9 @@ router.get("/:property_id", async (req, res) => {
   }
 });
 
-// handles both like and unlike
-// router.post("/like", async (req, res) => {
-//   const { propertyId, userId } = req.body;
-
-//   try {
-//     const property = await Property.findById(propertyId);
-
-//     if (!property) {
-//       return res
-//         .status(404)
-//         .json({ success: false, message: "Property not found" });
-//     }
-
-//     const userIndex = property.likes.indexOf(userId);
-
-//     if (userIndex > -1) {
-//       // User already liked, so unlike
-//       property.likes.splice(userIndex, 1);
-//     } else {
-//       // User not liked yet, so like
-//       property.likes.push(userId);
-//     }
-
-//     await property.save();
-
-//     res.json({ success: true });
-//   } catch (error) {
-//     res.status(500).json({ success: false, message: "Server error" });
-//   }
-// });
-
-// handles both like and unlike
+/**
+ * @description API endpoint to like/unlike a property
+ */
 router.post("/like", async (req, res) => {
   const { propertyId, userId } = req.body;
 
@@ -227,7 +201,7 @@ router.post("/like", async (req, res) => {
     const updatedLikesCount = property.likes.length;
     const updatedLikes = property.likes;
 
-    console.log("updating likes and broadcasting...");
+    // TODO : add websocket - if time permits
 
     res.json({
       success: true,
