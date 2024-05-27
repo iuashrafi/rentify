@@ -4,7 +4,7 @@ export const BACKEND_BASE_URL = "http://localhost:4000";
 // aws s3
 export const S3_BUCKET_NAME = "roomrent-2";
 export const AWS_REGION = "ap-south-1";
-const isAwsS3Active = true; // only this will change manually
+const isAwsS3Active = false; // only this will change manually
 
 export const generateImageUrl = (filename) => {
   if (isAwsS3Active)

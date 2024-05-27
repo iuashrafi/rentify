@@ -24,15 +24,15 @@ const s3 = new S3Client({
 });
 
 // multer file upload
-// const storage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, "uploads/");
-//   },
-//   filename: (req, file, cb) => {
-//     // rename the file
-//     cb(null, "rentify" + Date.now() + path.extname(file.originalname));
-//   },
-// });
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/");
+  },
+  filename: (req, file, cb) => {
+    // rename the file
+    cb(null, "rentify" + Date.now() + path.extname(file.originalname));
+  },
+});
 
 // aws-Multer
 const awsMulterStorage = multerS3({
@@ -47,7 +47,7 @@ const awsMulterStorage = multerS3({
   contentType: multerS3.AUTO_CONTENT_TYPE,
 });
 
-const upload = multer({ storage: awsMulterStorage });
+const upload = multer({ storage: storage });
 
 /**
  * @description API endpoint to add a property and upload images
@@ -62,13 +62,12 @@ router.post(
       const perks = JSON.parse(req.body.perks);
       const user_id = req.user.id;
       // for aws s3
-      const photos = req.files.map((file) => file.key); // Use 'key' to get the file name in S3
+      // const photos = req.files.map((file) => file.key); // Use 'key' to get the file name in S3
 
       //  for multer local
-      // const photos = req.files.map((file) => {
-      //  // console.log("file = ", file);
-      //   return file.filename;
-      // });
+      const photos = req.files.map((file) => {
+        return file.filename;
+      });
 
       const property = new Property({
         user_id,
@@ -109,12 +108,28 @@ router.put(
         return res.status(404).json({ message: "Property not found" });
       }
 
-      const { title, address, description, price, beds } = req.body;
+      const { title, address, description, price, beds, existingPhotos } =
+        req.body;
       const perks = JSON.parse(req.body.perks);
-      const user_id = req.user.id;
+
       // for local use => file.filename
       const newPhotos = req.files.map((file) => file.filename);
-      const existingPhotos = property.photos;
+
+      // for aws s3
+      // const newPhotos = req.files.map((file) => file.key);
+
+      // Combining existing and new photos
+      const photos = [...JSON.parse(existingPhotos), ...newPhotos];
+
+      // console.log("property updated to =>", {
+      //   title,
+      //   address,
+      //   description,
+      //   price,
+      //   beds,
+      //   perks,
+      //   photos,
+      // });
 
       // Update property fields
       property.title = title || property.title;
@@ -123,7 +138,7 @@ router.put(
       property.price = price || property.price;
       property.beds = beds || property.beds;
       property.perks = perks || property.perks;
-      property.photos = [...existingPhotos, ...newPhotos];
+      property.photos = photos;
 
       await property.save();
 

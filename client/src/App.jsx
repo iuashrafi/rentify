@@ -37,6 +37,11 @@ function App() {
 
             {/* Add Property page - for creating a listing */}
             <Route path="/add-property" element={<AddPropertyPage />} />
+            {/* Edit Property - for editing a listing */}
+            <Route
+              path="/edit-property/:property_id"
+              element={<AddPropertyPage />}
+            />
 
             {/* My Listings page - for displaying properties added by current user*/}
             <Route path="/listings" element={<ListingsPage />} />

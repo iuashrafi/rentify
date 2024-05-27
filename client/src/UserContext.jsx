@@ -1,6 +1,5 @@
 import { createContext, useEffect, useState } from "react";
 import axios from "axios";
-import { BACKEND_BASE_URL } from "./config";
 
 export const UserContext = createContext({});
 export function UserContextProvider({ children }) {
@@ -10,7 +9,7 @@ export function UserContextProvider({ children }) {
   useEffect(() => {
     if (!user) {
       axios
-        .get(`${BACKEND_BASE_URL}/api/profile`)
+        .get(`/api/profile`)
         .then(({ data }) => {
           // alert(JSON.stringify(data, 2, null));
           setUser(data);

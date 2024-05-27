@@ -1,11 +1,28 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X } from "lucide-react";
+import { generateImageUrl } from "../../../config";
 
-const PhotoUploader = ({ photosError, setPhotosError, setImageFiles }) => {
+const PhotoUploader = ({
+  photosError,
+  setPhotosError,
+  imageFiles,
+  setImageFiles,
+  existingPhotos,
+  setExistingPhotos,
+}) => {
   const [imagePreviews, setImagePreviews] = useState([]);
 
+  // useEffect(() => {
+  //   console.log("imagePreviews=", imagePreviews);
+  // }, [imagePreviews]);
+
+  useEffect(() => {
+    // Preload existing photos
+    setImagePreviews(getExistingPhotosObjects(existingPhotos));
+  }, []);
+
   const handleImageChange = (event) => {
-    const files = Array.from(event.currentTarget.files);
+    const files = Array.from(event.target.files);
     const validImageTypes = ["image/jpeg", "image/jpg", "image/png"];
     let hasInvalidFiles = false;
 
@@ -29,7 +46,6 @@ const PhotoUploader = ({ photosError, setPhotosError, setImageFiles }) => {
     if (!hasInvalidFiles) {
       setPhotosError("");
       setImagePreviews((prev) => [...prev, ...newPreviews]);
-      //   setImageFiles((prev) => [...prev, ...newPreviews]);
       setImageFiles((prev) => [
         ...prev,
         ...newPreviews.map((preview) => preview.file),
@@ -38,9 +54,50 @@ const PhotoUploader = ({ photosError, setPhotosError, setImageFiles }) => {
   };
 
   const handleRemoveImage = (index) => {
-    setImagePreviews((prev) => prev.filter((_, i) => i !== index));
-    setImageFiles((prev) => prev.filter((_, i) => i !== index));
+    // console.log("removing index = ", imagePreviews[index]);
+    const preview = imagePreviews[index];
+    if (preview.db) {
+      // if the image is from db, remove it from existing photos
+      // and also from the image preview
+
+      const updatedExistingPhotos = existingPhotos.filter(
+        (_, i) => i !== index
+      );
+      setExistingPhotos(updatedExistingPhotos);
+
+      setImagePreviews([
+        ...updatedExistingPhotos,
+        ...getImageFilesObjects(imageFiles),
+      ]);
+    } else {
+      // else the image is from file input by user
+      // so remove it from imageFiles state
+
+      let updatedIndex = index - existingPhotos.length;
+      const updateImageFiles = imageFiles.filter((_, i) => i !== updatedIndex);
+
+      const imgFilesForPreviews = getImageFilesObjects(updateImageFiles);
+
+      setImageFiles(updateImageFiles);
+
+      setImagePreviews([
+        ...getExistingPhotosObjects(existingPhotos),
+        ...imgFilesForPreviews,
+      ]);
+    }
   };
+
+  // helper functions for generating image objects
+  const getImageFilesObjects = (tmp) =>
+    tmp.map((file) => ({ url: URL.createObjectURL(file), file, db: false }));
+
+  const getExistingPhotosObjects = (filenames) =>
+    filenames.map((filename) => ({
+      url: generateImageUrl(filename),
+      file: null,
+      db: true,
+    }));
+
   return (
     <>
       <label className="form-control w-full max-w-xs">

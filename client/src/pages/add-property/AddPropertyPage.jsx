@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 import { UserContext } from "../../UserContext";
 import Loading from "../../components/Loading";
@@ -11,11 +11,21 @@ import { toast } from "sonner";
 import axios from "axios";
 
 const AddPropertyPage = () => {
+  const { property_id } = useParams();
   const navigate = useNavigate();
   const { user, ready } = useContext(UserContext);
 
   const [imageFiles, setImageFiles] = useState([]);
+  const [existingPhotos, setExistingPhotos] = useState([]);
   const [photosError, setPhotosError] = useState(""); // for photos validation
+  const [initialValues, setInitialValues] = useState({
+    title: "",
+    address: "",
+    description: "",
+    perks: [],
+    beds: 0,
+    price: 0,
+  });
 
   // check for authorization
   useEffect(() => {
@@ -24,19 +34,44 @@ const AddPropertyPage = () => {
     }
   }, [user, ready]);
 
+  // Fetch property data for editing
+  useEffect(() => {
+    const fetchProperty = async () => {
+      try {
+        const response = await axios.get(`/api/property/${property_id}`);
+        const property = response.data;
+        setInitialValues({
+          title: property.title,
+          address: property.address,
+          description: property.description,
+          perks: property.perks,
+          beds: property.beds,
+          price: property.price,
+        });
+        setExistingPhotos(property.photos);
+      } catch (error) {
+        toast.error("Failed to fetch property data.");
+        console.error(error);
+      }
+    };
+
+    if (property_id) {
+      fetchProperty();
+    }
+  }, [property_id]);
+
   // form handling
   const formik = useFormik({
-    initialValues: {
-      title: "",
-      address: "",
-      description: "",
-      perks: [],
-      beds: 0,
-      price: 0,
-    },
+    initialValues: initialValues,
+    enableReinitialize: true,
     validationSchema: PropertySchema,
     onSubmit: async (values) => {
       // alert(JSON.stringify(values, null, 2));
+
+      if (imageFiles.length === 0 && existingPhotos.length === 0) {
+        setPhotosError("Required");
+        return;
+      }
 
       console.log(imageFiles);
       const formData = new FormData();
@@ -52,17 +87,44 @@ const AddPropertyPage = () => {
         formData.append("photos", file);
       });
 
+      // Including existing photos in the update
+      formData.append("existingPhotos", JSON.stringify(existingPhotos));
+
       // posting to the database
       try {
-        // creating a new property
-        const response = await axios.post("/api/property", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-        toast.success("Property Added successfully");
-        navigate("/listings");
-        console.log("property added successfully=", response.data);
+        if (property_id) {
+          // if property_id exists then update the property
+          alert("updating Property");
+
+          console.log("updating property=> ", {
+            ...values,
+            imageFiles,
+            existingPhotos,
+          });
+
+          const response = await axios.put(
+            `/api/property/${property_id}`,
+            formData,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            }
+          );
+          toast.success("Property updated successfully");
+          navigate("/listings");
+        } else {
+          // else creating a new property
+          // creating a new property
+          const response = await axios.post("/api/property", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
+          toast.success("Property Added successfully");
+          navigate("/listings");
+          console.log("property added successfully=", response.data);
+        }
       } catch (error) {
         toast.error("Something went wrong!");
         console.error(error);
@@ -75,7 +137,7 @@ const AddPropertyPage = () => {
   }
   return (
     <div className="default-container">
-      <TypoGraphyH1 title="Add a Property" />
+      <TypoGraphyH1 title={property_id ? "Edit Property" : "Add a Property"} />
 
       <form onSubmit={formik.handleSubmit}>
         <label className="form-control w-full max-w-xs">
@@ -119,7 +181,10 @@ const AddPropertyPage = () => {
         <PhotoUploader
           photosError={photosError}
           setPhotosError={setPhotosError}
+          imageFiles={imageFiles}
           setImageFiles={setImageFiles}
+          existingPhotos={existingPhotos}
+          setExistingPhotos={setExistingPhotos}
         />
 
         <label className="form-control">
@@ -209,7 +274,7 @@ const AddPropertyPage = () => {
           disabled={formik.isSubmitting}
           className="my-3 btn btn-neutral px-8 rounded-full"
         >
-          Add Property
+          {property_id ? "Edit Property" : "Add Property"}
         </button>
       </form>
     </div>
